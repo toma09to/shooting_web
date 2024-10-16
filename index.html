@@ -7,7 +7,10 @@
   <body>
     <canvas id="game" width="600" height="600"></canvas>
     
+    <script src="vector.js"></script>
     <script src="keystate.js"></script>
+    <script src="ship.js"></script>
+    <script src="bullet.js"></script>
     <script>
       const FPS = 60;
       
@@ -15,15 +18,43 @@
       const context = screen.getContext('2d');
 
       const keyState = new KeyState();
+      const player = new Ship(1, 0, 0, 0, 'green');
+      const yarare = new Ship(2, 100, 0, 0, 'red');
+      const bullets = [];
 
-      let input = null;
-      do {
-        input = window.prompt('部屋番号を入力してください', 'みたいなダイアログ');
-      } while (input === null);
+      const ws = new WebSocket('ws://localhost:8080');
+
+      yarare.lives = 3;
 
       function draw() {
         context.fillStyle = 'black';
         context.fillRect(0, 0, 600, 600);
+
+        player.render(context);
+        yarare.render(context);
+
+        // Fire a bullet
+        if (player.fire(keyState)) {
+          bullets.push(new Bullet(player.id, player.pos, player.rad, player.shipColor));
+        }
+
+        // Move bullets
+        for (let i = 0; i < bullets.length; i++) {
+          bullets[i].move();
+          if (bullets[i].isAlive()) {
+            bullets[i].render(context);
+            if (bullets[i].isHit(yarare)) {
+              yarare.isAlive = false;
+              yarare.lastHitTime = Date.now();
+            }
+          } else {
+            bullets.splice(i, 1);
+            i -= 1;
+          }
+        }
+
+        player.control(keyState);
+        yarare.respawn(100, 0, 0);
 
         setTimeout(draw, 1000 / FPS);
       }
