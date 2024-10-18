@@ -156,15 +156,17 @@ class Ship {
   }
 
   data() {
-    return 'Ship,'
-            + this.id.toString() + ','
-            + this.shipColor + ','
-            + this.pos.x.toString() + ','
-            + this.pos.y.toString() + ','
-            + this.rad.toString() + ','
-            + this.isAccelerating.toString() + ','
-            + this.isAlive.toString() + ','
-            + this.lives.toString();
+    return JSON.stringify({
+      type: "ship",
+      data: {
+        id: this.id,
+        pos: this.pos,
+        rad: this.rad,
+        isAccelerating: this.isAccelerating,
+        isAlive: this.isAlive,
+        lives: this.lives,
+      },
+    });
   }
 
   ready() {

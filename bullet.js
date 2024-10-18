@@ -31,11 +31,12 @@ class Bullet {
   }
 
   data() {
-    return 'Bullet,'
-            + this.id.toString() + ','
-            + this.bulletColor + ','
-            + this.pos.x.toString() + ','
-            + this.pos.y.toString() + ','
-            + this.rad.toString() + ','
+    return JSON.stringify({
+      type: 'Bullet',
+      data: {
+        id: this.id,
+        pos: this.pos,
+      },
+    });
   }
 }
