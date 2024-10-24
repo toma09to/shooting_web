@@ -27,7 +27,7 @@ class Bullet {
   }
 
   isHit(ship) {
-    return (this.pos.dist(ship.pos) < 12.0);
+    return (this.pos.dist(ship.pos) < 4.87);
   }
 
   data() {
@@ -36,6 +36,7 @@ class Bullet {
       data: {
         id: this.id,
         pos: this.pos,
+        rad: this.rad,
       },
     });
   }

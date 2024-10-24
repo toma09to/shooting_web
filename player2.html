@@ -17,15 +17,15 @@
       const screen = document.getElementById('game');
       const context = screen.getContext('2d');
 
-      const myId = 1;
+      const myId = 2;
       const keyState = new KeyState();
       const player1 = new Ship(1, 0, 0, 0, 'green');
       const player2 = new Ship(2, 50, 0, 0, 'red');
       const ships = [player1, player2];
       const bullets = [];
 
-      player1.entry();
-      player1.isReady = true;
+      player2.entry();
+      player2.isReady = true;
 
       let isConnected = false;
       let ws;
@@ -75,8 +75,8 @@
         ships.forEach((ship) => { ship.render(context); });
 
         // Fire a bullet
-        if (player1.fire(keyState)) {
-          const newBullet = new Bullet(player1.id, player1.pos, player1.rad, player1.shipColor);
+        if (player2.fire(keyState)) {
+          const newBullet = new Bullet(player2.id, player2.pos, player2.rad, player2.shipColor);
           bullets.push(newBullet);
           try {
             ws.send(newBullet.data());
@@ -90,9 +90,9 @@
           bullets[i].move();
           if (bullets[i].isAlive()) {
             bullets[i].render(context);
-            if (bullets[i].isHit(player1)) {
-              player1.isAlive = false;
-              player1.lastHitTime = Date.now();
+            if (bullets[i].isHit(player2)) {
+              player2.isAlive = false;
+              player2.lastHitTime = Date.now();
             }
           } else {
             bullets.splice(i, 1);
@@ -103,14 +103,14 @@
         // Send data
         if (isConnected) {
           try {
-            ws.send(player1.data());
+            ws.send(player2.data());
           } catch (e) {
             console.log(e);
           }
         }
 
-        player1.control(keyState);
-        player1.respawn(0, 0, 0);
+        player2.control(keyState);
+        player2.respawn(0, 0, 0);
 
         if (keyState.get('ArrowDown')) {
           ws.close();

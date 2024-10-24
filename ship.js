@@ -157,7 +157,7 @@ class Ship {
 
   data() {
     return JSON.stringify({
-      type: "ship",
+      type: "Ship",
       data: {
         id: this.id,
         pos: this.pos,
