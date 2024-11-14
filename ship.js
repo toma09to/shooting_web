@@ -77,6 +77,11 @@ class Ship {
         ctx.stroke();
       }
     }
+
+    if (this.isReady) {
+      ctx.fillStyle = this.shipColor;
+      ctx.fillText('Ready', this.pos.windowX(), this.pos.windowY() + 40);
+    }
   }
 
   entry() {
