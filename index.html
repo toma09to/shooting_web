@@ -96,9 +96,7 @@
               break;
             case 'Start':
               isStarted = true;
-              ws.send({
-                'type': 'Started'
-              });
+              ws.send(JSON.stringify({ 'type': 'Started' }));
               break;
             case 'End':
               data.ranking.forEach((player) => { ranking.push(player); });

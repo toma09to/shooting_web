@@ -3,31 +3,34 @@ import websockets
 import json
 
 CLIENTS = set()
-is_started = False
+is_started = set()
 join_list = [False, False, False, False]
 ready_list = [False, False, False, False]
-ranking = []
 
 async def handler(websocket):
-    is_started = False
+    global is_started
+
+    ranking = []
     CLIENTS.add(websocket)
     while True:
         try:
             message = await websocket.recv()
             received_data = json.loads(message)
-            print(received_data, flush=True)
+            # print(received_data, flush=True)
             
-            if is_started:
+            if websocket in is_started:
+                if received_data['type'] == 'Ship' \
+                    and received_data['data']['lives'] <= 0 \
+                    and received_data['data']['id'] not in ranking:
+                    ranking.append(received_data['data']['id'])
                 if received_data['type'] == 'Ship' or received_data['type'] == 'Bullet':
-                    if received_data['data']['lives'] <= 0:
-                        ranking.append(received_data['data']['id'])
                     for ws in CLIENTS:
                         await ws.send(message)
                 else:
                     print(f'received invalid data: {message}')
 
                 if len(ranking) >= sum(join_list) - 1:
-                    ranking.append(6 - sum(ranking))
+                    ranking.append(sum(join_list) - sum(ranking))
                     ranking.reverse()
                     for ws in CLIENTS:
                         await ws.send(json.dumps({
@@ -36,6 +39,7 @@ async def handler(websocket):
                                 'ranking': ranking
                             }
                         }))
+                    websocket.close()
             else:
                 if received_data['type'] == 'JoinReq':
                     for i in range(4):
@@ -81,20 +85,21 @@ async def handler(websocket):
                             break
                     else:
                         await asyncio.sleep(1)
-                        is_started = True
                         for ws in CLIENTS:
                             await ws.send(json.dumps({
                                 'type': 'Start',
                                 'data': {}
                             }))
                 elif received_data['type'] == 'Started':
-                    is_started = True
+                    for ws in CLIENTS:
+                        is_started.add(ws)
                 else:
                     print(f'received invalid data: {message}')
 
         except websockets.ConnectionClosedOK:
             if 'ship_id' in locals():
                 join_list[ship_id] = False
+                is_started.remove(websocket)
             break
 
     CLIENTS.remove(websocket)
