@@ -1,19 +1,10 @@
-use std::ops::{Add, Sub, Mul, Div};
+use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign};
 
 pub const WIDTH: i32 = 600;
 pub const HEIGHT: i32 = 600;
 const MARGIN: i32 = 15;
 
-// If a value cannot be converted into int, returns 0
-fn float_to_int(f: f32) -> i32 {
-    if f.is_nan() || f > i32::MAX as f32 || f < i32::MIN as f32 {
-        0
-    } else {
-        unsafe { f.to_int_unchecked() }
-    }
-}
-
-#[derive(Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq)]
 pub struct Vector {
     pub x: f32,
     pub y: f32,
@@ -21,27 +12,20 @@ pub struct Vector {
 
 impl Vector {
     pub fn new(mut x: f32, mut y: f32) -> Self {
-        while x > WIDTH as f32 / 2.0 + MARGIN as f32 {
+        while x > WIDTH as f32 + MARGIN as f32 {
             x -= WIDTH as f32 + MARGIN as f32 * 2.0;
         }
-        while x < -WIDTH as f32 / 2.0 - MARGIN as f32 {
+        while x < -MARGIN as f32 {
             x += WIDTH as f32 + MARGIN as f32 * 2.0;
         }
-        while y > HEIGHT as f32 / 2.0 + MARGIN as f32 {
+        while y > HEIGHT as f32 + MARGIN as f32 {
             y -= HEIGHT as f32 + MARGIN as f32 * 2.0;
         }
-        while y < -WIDTH as f32 / 2.0 - MARGIN as f32 {
+        while y < -MARGIN as f32 {
             y += WIDTH as f32 + MARGIN as f32 * 2.0;
         }
 
         Self { x, y }
-    }
-
-    pub fn to_canvas_coordinate(&self) -> (i32, i32) {
-        (
-            float_to_int(self.x) + WIDTH / 2,
-            -float_to_int(self.y) + HEIGHT / 2,
-        )
     }
 
     pub fn rotate(&self, rad: f32) -> Self {
@@ -60,6 +44,12 @@ impl Add<Self> for Vector {
     }
 }
 
+impl AddAssign<Self> for Vector {
+    fn add_assign(&mut self, rhs: Self) {
+        *self = Vector::new(self.x + rhs.x, self.y + rhs.y);
+    }
+}
+
 impl Sub<Self> for Vector {
     type Output = Self;
 
@@ -68,19 +58,37 @@ impl Sub<Self> for Vector {
     }
 }
 
-impl Mul<Self> for Vector {
-    type Output = Self;
-
-    fn mul(self, rhs: Self) -> Self::Output {
-        Vector::new(self.x * rhs.x, self.y * rhs.y)
+impl SubAssign<Self> for Vector {
+    fn sub_assign(&mut self, rhs: Self) {
+        *self = Vector::new(self.x - rhs.x, self.y - rhs.y);
     }
 }
 
-impl Div<Self> for Vector {
+impl Mul<f32> for Vector {
     type Output = Self;
 
-    fn div(self, rhs: Self) -> Self::Output {
-        Vector::new(self.x / rhs.x, self.y / rhs.y)
+    fn mul(self, rhs: f32) -> Self::Output {
+        Vector::new(self.x * rhs, self.y * rhs)
+    }
+}
+
+impl MulAssign<f32> for Vector {
+    fn mul_assign(&mut self, rhs: f32) {
+        *self = Vector::new(self.x * rhs, self.y * rhs);
+    }
+}
+
+impl Div<f32> for Vector {
+    type Output = Self;
+
+    fn div(self, rhs: f32) -> Self::Output {
+        Vector::new(self.x / rhs, self.y / rhs)
+    }
+}
+
+impl DivAssign<f32> for Vector {
+    fn div_assign(&mut self, rhs: f32) {
+        *self = Vector::new(self.x / rhs, self.y / rhs);
     }
 }
 
@@ -93,8 +101,8 @@ mod tests {
         let a = Vector::new(300.0, 400.0);
         let b = Vector::new(100.0, 1100.0);
 
-        assert_eq!(a, Vector::new(300.0, -230.0));
-        assert_eq!(b, Vector::new(100.0, -160.0));
-        assert_eq!(a + b, Vector::new(-230.0, 240.0));
+        assert_eq!(a, Vector::new(300.0, 400.0));
+        assert_eq!(b, Vector::new(100.0, 470.0));
+        assert_eq!(a + b, Vector::new(400.0, 240.0));
     }
 }
