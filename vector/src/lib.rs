@@ -1,10 +1,11 @@
 use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign};
+use serde::{Serialize, Deserialize};
 
 pub const WIDTH: i32 = 600;
 pub const HEIGHT: i32 = 600;
 const MARGIN: i32 = 15;
 
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, Serialize, Deserialize)]
 pub struct Vector {
     pub x: f32,
     pub y: f32,
@@ -123,5 +124,12 @@ mod tests {
             after += diff;
         }
         assert!(Vector::dist2(before, after) >= 10001.0);
+    }
+
+    #[test]
+    fn serialize_test() {
+        let v = Vector::new(123.0, 456.0);
+
+        assert_eq!(serde_json::to_string(&v).unwrap(), "{\"x\":123.0,\"y\":456.0}");
     }
 }
