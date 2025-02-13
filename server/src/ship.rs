@@ -1,6 +1,7 @@
 use std::f32::consts::PI;
 
 use vector::{Vector, WIDTH, HEIGHT};
+use serde::{Serialize, Deserialize};
 
 use crate::{bullet::Bullet, keystate::KeyState};
 
@@ -9,11 +10,15 @@ pub const ACCEL_FACTOR: f32 = 0.03;
 pub const DECEL_FACTOR: f32 = 0.005;
 pub const MAX_LIVES: u32 = 3;
 
+#[derive(Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct Ship {
     color: String,
     pos: Vector,
     rad: f32,
+    #[serde(skip)]
     speed: Vector,
+    #[serde(skip)]
     lives: u32,
     is_alive: bool,
     is_accelerating: bool,
