@@ -34,6 +34,10 @@ impl Vector {
             self.x * rad.sin() + self.y * rad.cos(),
         )
     }
+
+    pub fn dist2(a: Vector, b: Vector) -> f32 {
+        (a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y)
+    }
 }
 
 impl Add<Self> for Vector {
@@ -104,5 +108,20 @@ mod tests {
         assert_eq!(a, Vector::new(300.0, 400.0));
         assert_eq!(b, Vector::new(100.0, 470.0));
         assert_eq!(a + b, Vector::new(400.0, 240.0));
+    }
+
+    #[test]
+    fn dist_test() {
+        let mut before = Vector::new(0.0, 0.0);
+        let mut after = Vector::new(0.0, 0.0);
+        let diff = Vector::new(100.0, 0.0);
+
+        after += diff;
+        for _ in 0..6 {
+            assert!(Vector::dist2(before, after) <= 10001.0);
+            before = after;
+            after += diff;
+        }
+        assert!(Vector::dist2(before, after) >= 10001.0);
     }
 }
