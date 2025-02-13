@@ -1,11 +1,12 @@
 use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign};
+use std::default::Default;
 use serde::{Serialize, Deserialize};
 
 pub const WIDTH: i32 = 600;
 pub const HEIGHT: i32 = 600;
 const MARGIN: i32 = 15;
 
-#[derive(Clone, Copy, Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Copy, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct Vector {
     pub x: f32,
     pub y: f32,
