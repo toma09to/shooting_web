@@ -10,7 +10,7 @@ pub const ACCEL_FACTOR: f32 = 0.03;
 pub const DECEL_FACTOR: f32 = 0.005;
 pub const MAX_LIVES: u32 = 3;
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Ship {
     color: String,
@@ -77,5 +77,9 @@ impl Ship {
 
         let head = self.pos + Vector::new(15.0, 0.0).rotate(self.rad);
         Some(Bullet::new(self.color.clone(), head, self.rad))
+    }
+
+    pub fn is_alive(&self) -> bool {
+        self.is_alive
     }
 }

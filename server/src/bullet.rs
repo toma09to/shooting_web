@@ -2,6 +2,7 @@ use vector::Vector;
 
 const SPEED_SIZE: f32 = 7.0;
 
+#[derive(Debug)]
 pub struct Bullet {
     color: String,
     pos: Vector,
