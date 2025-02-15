@@ -1,9 +1,8 @@
-use std::{collections::{HashMap, HashSet, VecDeque}, sync::{Arc, Mutex, RwLock}, time::{Duration, Instant}};
-use std::thread::{self, JoinHandle};
+use std::{collections::{HashMap, HashSet, VecDeque}, sync::{Arc, Mutex}, time::{Duration, Instant}};
+use std::thread;
 use std::f32::consts::PI;
 
 use actix::prelude::*;
-use actix_web::web;
 use rand::{Rng, rngs::ThreadRng};
 use serde::Serialize;
 use vector::Vector;
@@ -53,14 +52,6 @@ impl Text {
 
     pub fn space_to_ready(num: u8) -> Self {
         Self::with_color_num(num, 300.0, 500.0, "Space to Ready".to_string())
-    }
-
-    pub fn game_over(num: u8) -> Self {
-        Self::with_color_num(num, 300.0, 270.0, "GAME OVER".to_string())
-    }
-
-    pub fn please_wait(num: u8) -> Self {
-        Self::with_color_num(num, 300.0, 330.0, "Please Wait".to_string())
     }
 
     pub fn ranking(ord: usize, num: u8) -> Self {
@@ -181,7 +172,6 @@ pub struct GameData {
 
 #[derive(Debug)]
 pub struct GameThread {
-    thread: JoinHandle<()>,
     data: GameData,
 }
 
@@ -205,7 +195,7 @@ impl GameThread {
 
         let mut all_ready_time: HashMap<usize, Instant> = HashMap::new();
 
-        let thread = thread::spawn(move || {
+        thread::spawn(move || {
             let mut before_frame = Instant::now();
 
             loop {
@@ -383,7 +373,6 @@ impl GameThread {
         });
 
         Self {
-            thread,
             data: GameData {
                 listeners,
                 ships,

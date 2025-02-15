@@ -57,7 +57,6 @@ impl Actor for GameSession {
     fn started(&mut self, ctx: &mut Self::Context) {
         self.hb(ctx);
 
-        let addr = ctx.address();
         self.addr
             .send(server::Connect)
             .into_actor(self)
@@ -144,7 +143,7 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for GameSession {
                                 state: data,
                             })
                             .into_actor(self)
-                            .then(|res, act, ctx| {
+                            .then(|res, _act, ctx| {
                                 if let Err(_) = res {
                                     ctx.stop();
                                 }
@@ -161,7 +160,7 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for GameSession {
                                 room_id: self.room
                             })
                             .into_actor(self)
-                            .then(|res, act, ctx| fut::ready(()))
+                            .then(|_res, _act, _ctx| fut::ready(()))
                             .wait(ctx);
                     }
                     ClientMessage::Error(text) => log::warn!("Invalid message: {text}"),

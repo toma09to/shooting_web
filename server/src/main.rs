@@ -3,7 +3,7 @@ use std::{env, fs, time::Instant};
 use actix::*;
 use actix_files::NamedFile;
 use actix_web::{
-    get, http::header::ContentEncoding, middleware::Logger, post, web, App, Error, HttpRequest, HttpResponse, HttpServer
+    middleware::Logger, get, post, web, App, Error, HttpRequest, HttpResponse, HttpServer
 };
 use actix_web_actors::ws;
 use serde::Deserialize;

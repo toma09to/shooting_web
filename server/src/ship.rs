@@ -1,7 +1,7 @@
 use std::{f32::consts::PI, time::{Instant, Duration}};
 
 use vector::{Vector, WIDTH, HEIGHT};
-use serde::{Serialize, Deserialize};
+use serde::Serialize;
 
 use crate::{bullet::Bullet, keystate::KeyState, server::Text};
 
