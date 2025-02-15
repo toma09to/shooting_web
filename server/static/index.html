@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link href="https://fonts.googleapis.com/css?family=Noto Serif" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto Mono" rel="stylesheet">
+    <link href="/static/lobby.css" rel="stylesheet">
+    <title>Shooting</title>
+  </head>
+  <body>
+    <main>
+      <article>
+        <h1>Shooting Game Lobby</h1>
+        <div id="game-play">
+          <h2>Game Play</h2>
+          <div id="buttons">
+            <button type="button" onclick="joinRandom()">Join a room randomly</button>
+            <button type="button" onclick="makeRoomAndJoin()">Make a room and Join</button>
+          </div>
+        </div>
+        <div id="room-select">
+          <h2>Room Select</h2>
+          <div id="rooms">
+            {server_replace}
+          </div>
+        </div>
+      </article>
+      <aside>
+        <h1>How to Play</h1>
+        <video autoplay muted loop>
+          <source src="/static/how-to-play.mp4" type="video/mp4">
+
+          上キーで加速<br>
+          左右キーで旋回<br>
+          スペースキーで弾を発射<br>
+        </video>
+      </aside>
+    </main>
+    <script>
+      function joinRandom() {
+        const promise = fetch('/rooms').then((response) => response.json());
+
+        promise.then((rooms) => {
+          if (rooms.length > 0) {
+            const random = Math.floor(Math.random() * rooms.length);
+
+            location.href = '/game?id=' + rooms[random] + '&watch=false';
+          } else {
+            alert('部屋が存在しません。');
+          }
+        });
+      }
+
+      function makeRoomAndJoin() {
+        const promise = fetch('/rooms', {
+          method: "POST"
+        }).then((response) => response.json());
+
+        promise.then((room_id) => {
+          alert(`部屋を作成しました。部屋番号は${room_id}です。`);
+          location.href = '/game?id=' + room_id + '&watch=false';
+        });
+      }
+    </script>
+  </body>
+</html>

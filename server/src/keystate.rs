@@ -11,3 +11,14 @@ pub struct KeyState {
     #[serde(rename = " ")]
     pub space: bool,
 }
+
+impl KeyState {
+    pub fn new() -> Self {
+        Self {
+            left: false,
+            right: false,
+            up: false,
+            space: false,
+        }
+    }
+}

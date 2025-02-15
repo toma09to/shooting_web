@@ -1,0 +1,120 @@
+main {
+  display: flex;
+  width: 100%;
+  font-family: "Noto Serif";
+  font-weight: 400;
+}
+
+h1 {
+  font-size: 4vw;
+}
+h2 {
+  font-size: 3vw;
+}
+
+article {
+  margin-left: 2.5%;
+  margin-right: 2.5%;
+  width: 45%;
+}
+
+aside {
+  margin-left: 2.5%;
+  margin-right: 2.5%;
+  width: 45%;
+}
+
+video {
+  width: 100%;
+}
+
+button {
+  font-family: "Roboto Mono";
+  font-size: 1.5vw;
+  background-color: #e5e5e5;
+  border: none;
+  border-radius: 0.5vw;
+  padding: 0.5vw 2vw;
+}
+button:hover {
+  background-color: #bcbcbc;
+}
+
+#buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+#rooms {
+  width: 100%;
+}
+
+.room {
+  width: 100%;
+  display: flex;
+  margin: 0.5vw 0;
+  padding-top: 0.5vw;
+  padding-bottom: 0.5vw;
+  background-color: #d9d9d9;
+  border-radius: 1vw;
+  font-family: "Roboto Mono";
+}
+
+.information {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  width: 55%;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  width: 45%;
+}
+
+.buttons a {
+  display: block;
+  text-decoration: none;
+  color: #000000;
+  background-color: #e5e5e5;
+  margin: 0 auto;
+  padding-left: 2vw;
+  padding-right: 2vw;
+  border-radius: 0.5vw;
+  font-size: 1.5vw;
+}
+.buttons a:hover {
+  background-color: #bcbcbc;
+}
+
+.information p {
+  margin: 0;
+}
+
+.room-id {
+  padding-left: 1.5vw;
+  padding-right: 1.5vw;
+  font-size: 2vw;
+}
+.room-condition {
+  padding-left: 2vw;
+  padding-right: 2vw;
+  font-size: 1.5vw;
+  border-radius: 0.5vw;
+}
+.playing {
+  background-color: #ffd9d9;
+}
+.recruiting {
+  background-color: #d9ffd9;
+}
+.player-num {
+  padding-left: 1vw;
+}
+
+.full {
+  background-color: #bcbcbc !important;
+}

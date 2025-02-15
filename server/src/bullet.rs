@@ -1,11 +1,12 @@
+use serde::Serialize;
 use vector::Vector;
 
 const SPEED_SIZE: f32 = 7.0;
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Serialize)]
 pub struct Bullet {
     color: String,
-    pos: Vector,
+    pub pos: Vector,
     speed: Vector,
 }
 
