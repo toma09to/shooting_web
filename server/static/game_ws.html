@@ -89,7 +89,6 @@
 
         ws.onmessage = (event) => {
           // When a message comes
-          console.log(event.data);
           const message = JSON.parse(event.data);
 
           if (message.type === 'objects') {
