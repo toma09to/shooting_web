@@ -110,7 +110,6 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for GameSession {
                 self.hb = Instant::now();
             },
             ws::Message::Text(text) => {
-                // TODO: Handles a client's KeyState
                 let msg: ClientMessage = match serde_json::from_str(&text) {
                     Ok(msg) => msg,
                     Err(_) => ClientMessage::Error(text.to_string()),
