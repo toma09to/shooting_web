@@ -41,6 +41,7 @@ impl GameSession {
                 act.addr.do_send(server::Disconnect {
                     id: act.id,
                     room: act.room,
+                    watch: act.watch,
                 });
                 ctx.stop();
                 return;
@@ -77,6 +78,7 @@ impl Actor for GameSession {
         self.addr.do_send(server::Disconnect {
             id: self.id,
             room: self.room,
+            watch: self.watch,
         });
         Running::Stop
     }

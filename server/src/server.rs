@@ -106,6 +106,7 @@ pub struct Connect;
 pub struct Disconnect {
     pub id: usize,
     pub room: usize,
+    pub watch: bool,
 }
 
 #[derive(Message)]
@@ -429,12 +430,12 @@ impl Handler<Disconnect> for GameServer {
     type Result = ();
 
     fn handle(&mut self, msg: Disconnect, _ctx: &mut Self::Context) {
-        let Disconnect { id, room } = msg;
+        let Disconnect { id, room, watch } = msg;
 
         match self.room_num.get_mut(&room) {
             Some(0) => (),
             Some(room_num) => {
-                if *room_num > 0 {
+                if *room_num > 0 && watch {
                     *room_num -= 1;
                 }
             },
