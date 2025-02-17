@@ -89,7 +89,7 @@ impl Ship {
     pub fn fire(&mut self) -> Option<Bullet> {
         let now = Instant::now();
 
-        if now.duration_since(self.last_fire_time) > CHARGE_TIME {
+        if self.is_alive && now.duration_since(self.last_fire_time) > CHARGE_TIME {
             self.last_fire_time = now;
 
             let head = self.pos + Vector::new(15.0, 0.0).rotate(self.rad);

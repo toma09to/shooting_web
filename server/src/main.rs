@@ -42,9 +42,10 @@ async fn ws_route(
 
 #[get("/")]
 async fn lobby(_req: HttpRequest, srv: web::Data<Addr<server::GameServer>>) -> HttpResponse {
-    let rooms = srv.send(server::ListRooms).await.unwrap();
+    let mut rooms = srv.send(server::ListRooms).await.unwrap();
     let mut rooms_html = String::new();
 
+    rooms.sort();
     for room in rooms {
         let player_count = srv.send(server::GetPlayerCount {
             room_id: room,
