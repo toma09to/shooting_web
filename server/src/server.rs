@@ -538,12 +538,6 @@ impl Handler<Join> for GameServer {
     fn handle(&mut self, msg: Join, _ctx: &mut Self::Context) -> bool {
         let Join { id, room, addr, watch } = msg;
 
-        if let Some(room_num) = self.room_num.get_mut(&room) {
-            *room_num += 1;
-        } else {
-            return false;
-        }
-
         let game_data = self.get_game_data();
         let mut listeners = game_data.listeners.lock().unwrap();
         let mut ships = game_data.ships.lock().unwrap();
@@ -552,6 +546,12 @@ impl Handler<Join> for GameServer {
         let is_playing = game_data.is_playing.lock().unwrap();
 
         if !watch {
+            if let Some(room_num) = self.room_num.get_mut(&room) {
+                *room_num += 1;
+            } else {
+                return false;
+            }
+
             if let Some(false) = is_playing.get(&room) {
                 let player_num = self.player_num_pool.get_mut(&room)
                     .expect("Room not found")
