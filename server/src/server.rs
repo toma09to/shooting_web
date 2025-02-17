@@ -435,7 +435,7 @@ impl Handler<Disconnect> for GameServer {
         match self.room_num.get_mut(&room) {
             Some(0) => (),
             Some(room_num) => {
-                if *room_num > 0 && watch {
+                if *room_num > 0 && !watch {
                     *room_num -= 1;
                 }
             },
